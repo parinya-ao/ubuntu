@@ -48,7 +48,7 @@ Configures the fish shell with custom aliases and functions for SSD status check
 2. Navigate to the repository directory.
 3. Run the `start.fish` script to begin the installation process:
    ```bash
-   fish /home/parinya/ubuntu_install/start.fish
+   fish ~/ubuntu_install/start.fish
    ```
 4. Follow the prompts and wait for the installation to complete.
 

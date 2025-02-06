@@ -96,13 +96,13 @@ else
 fi
 
 # Run other scripts
-run_with_max_cpu fish /home/parinya/ubuntu_install/program/programing.fish
-run_with_max_cpu fish /home/parinya/ubuntu_install/program/github.fish
-run_with_max_cpu fish /home/parinya/ubuntu_install/program/docker.fish
-run_with_max_cpu fish /home/parinya/ubuntu_install/program/android_sdk.fish
-run_with_max_cpu fish /home/parinya/ubuntu_install/program/vscode.fish
-run_with_max_cpu fish /home/parinya/ubuntu_install/program/update-all.fish
-run_with_max_cpu fish /home/parinya/ubuntu_install/program/education.fish
+run_with_max_cpu fish ~/ubuntu_install/program/programing.fish
+run_with_max_cpu fish ~/ubuntu_install/program/github.fish
+run_with_max_cpu fish ~/ubuntu_install/program/docker.fish
+run_with_max_cpu fish ~/ubuntu_install/program/android_sdk.fish
+run_with_max_cpu fish ~/ubuntu_install/program/vscode.fish
+run_with_max_cpu fish ~/ubuntu_install/program/update-all.fish
+run_with_max_cpu fish ~/ubuntu_install/program/education.fish
 
 # Remove internet bandwidth limit
 sudo tc qdisc del dev eth0 root
