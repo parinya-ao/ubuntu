@@ -23,6 +23,9 @@ end
 # Ensure all commands run with sudo su
 sudo su
 
+# Install Virtual Fish
+run_with_max_cpu curl -L https://raw.githubusercontent.com/justinmayer/virtualfish/master/install.py | python3 -
+
 if [ "$show_logs" = "y" ]; then
     run_with_max_cpu sudo apt install fish
     run_with_max_cpu sudo chsh -s $(which fish)
