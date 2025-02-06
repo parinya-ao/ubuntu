@@ -1,33 +1,47 @@
+# Function to run commands with logging and error handling
+function run_with_logging {
+    cmd=$@
+    $cmd | tee -a /var/log/update.log
+    if [ $? -ne 0 ]; then
+        echo "Error occurred during: $cmd" | tee -a /var/log/update.log
+        exit 1
+    fi
+}
+
 # Update nvm
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/$(curl -s https://api.github.com/repos/nvm-sh/nvm/releases/latest | grep 'tag_name' | cut -d\" -f4)/install.sh | bash
+run_with_logging curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/$(curl -s https://api.github.com/repos/nvm-sh/nvm/releases/latest | grep 'tag_name' | cut -d\" -f4)/install.sh | bash
 
 # Update system packages
-sudo apt update
-sudo apt upgrade -y
-sudo apt full-upgrade -y
-sudo apt autoremove -y
+run_with_logging sudo apt update
+run_with_logging sudo apt upgrade -y
+run_with_logging sudo apt full-upgrade -y
+run_with_logging sudo apt autoremove -y
 
 # Update Android SDK
-yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --update
+run_with_logging yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --update
 
 # Update flatpak packages
-sudo flatpak update -y
+run_with_logging sudo flatpak update -y
 
 # Update Docker
-sudo apt update
-sudo apt install --only-upgrade docker-ce docker-ce-cli containerd.io -y
+run_with_logging sudo apt update
+run_with_logging sudo apt install --only-upgrade docker-ce docker-ce-cli containerd.io -y
 
 # Update Virtual Machine Manager
-wget https://virt-manager.org/download/sources/virt-manager/virt-manager-5.0.0.tar.gz
-echo "b7fe1ed4a7959bdaca7a8fd57461dbbf9a205eb23cc218ed828ed88e8b998cb5  virt-manager-5.0.0.tar.gz" | sha256sum -c -
+run_with_logging wget https://virt-manager.org/download/sources/virt-manager/virt-manager-5.0.0.tar.gz
+run_with_logging echo "b7fe1ed4a7959bdaca7a8fd57461dbbf9a205eb23cc218ed828ed88e8b998cb5  virt-manager-5.0.0.tar.gz" | sha256sum -c -
 if [ $? -eq 0 ]; then
-    tar -xzf virt-manager-5.0.0.tar.gz
+    run_with_logging tar -xzf virt-manager-5.0.0.tar.gz
     cd virt-manager-5.0.0
-    sudo python setup.py install
+    run_with_logging sudo python setup.py install
     cd ..
-    rm -rf virt-manager-5.0.0 virt-manager-5.0.0.tar.gz
+    run_with_logging rm -rf virt-manager-5.0.0 virt-manager-5.0.0.tar.gz
 else
-    echo "SHA-256 checksum does not match. Aborting update."
+    echo "SHA-256 checksum does not match. Aborting update." | tee -a /var/log/update.log
     exit 1
 fi
+
+# Clean up
+run_with_logging sudo apt autoremove -y
+run_with_logging sudo apt clean
 
