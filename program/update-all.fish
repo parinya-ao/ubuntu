@@ -12,6 +12,8 @@ end
 run_with_logging "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/(curl -s https://api.github.com/repos/nvm-sh/nvm/releases/latest | grep 'tag_name' | string sub -s 2 -e -1)/install.sh | bash"
 
 # Update system packages
+run_with_logging fish ~/ubuntu_install/program/mirror-config.fish
+run_with_logging fish ~/ubuntu_install/program/fix-dpkg.fish
 run_with_logging sudo apt update
 run_with_logging sudo apt upgrade -y
 run_with_logging sudo apt full-upgrade -y

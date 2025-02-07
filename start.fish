@@ -36,6 +36,12 @@ end
 # Ensure all commands run with sudo su
 sudo su
 
+# Configure global mirrors
+run_with_max_cpu fish ~/ubuntu_install/program/mirror-config.fish
+
+# Fix dpkg if needed
+run_with_max_cpu fish ~/ubuntu_install/program/fix-dpkg.fish
+
 # Install Virtual Fish
 run_with_max_cpu curl -L https://raw.githubusercontent.com/justinmayer/virtualfish/master/install.py | python3 -
 
