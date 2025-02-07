@@ -7,7 +7,6 @@ if status is-interactive
     alias ghs="gh copilot suggest"
 
 
-
     #alias function ssd
     function ssdstatus
     	sudo smartctl -i /dev/nvme0n1

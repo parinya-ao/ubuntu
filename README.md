@@ -2,7 +2,14 @@
 
 # Ubuntu Installation Scripts
 
-This repository contains a collection of scripts to automate the installation and configuration of various software packages on an Ubuntu system. The scripts are designed to streamline the setup process and ensure that all necessary tools and applications are installed efficiently.
+## How to Run
+
+1. Clone the repository to your local machine.
+2. Navigate to the repository directory.
+3. Run the `start.fish` script to begin the installation process:
+   ```bash
+   fish ~/ubuntu_install/start.fish
+   ```
 
 ## Scripts
 

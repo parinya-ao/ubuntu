@@ -1,3 +1,7 @@
+# Set DNS to 1.1.1.1 or 8.8.4.4
+sudo bash -c 'echo "nameserver 1.1.1.1" > /etc/resolv.conf'
+sudo bash -c 'echo "nameserver 8.8.4.4" >> /etc/resolv.conf'
+
 # Prompt user to show logs or not
 read -p "Show logs? (y/n): " show_logs
 
@@ -113,3 +117,6 @@ sudo tc qdisc del dev eth0 root
 # Clean up
 sudo apt autoremove -y
 sudo apt clean
+
+# Configure update manager to only notify for LTS releases
+sudo bash -c 'echo "Prompt=lts" > /etc/update-manager/release-upgrades'
