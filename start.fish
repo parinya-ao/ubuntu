@@ -20,7 +20,16 @@ function run_with_max_cpu
     end
     if [ $? -ne 0 ]
         echo "Error occurred during: $cmd" | tee -a /var/log/install.log
-        exit 1
+        echo "Retrying without maximum CPU utilization..."
+        if [ "$show_logs" = "y" ]; then
+            sudo $cmd | tee -a /var/log/install.log
+        else
+            sudo $cmd > /dev/null 2>&1
+        end
+        if [ $? -ne 0 ]
+            echo "Error occurred during: $cmd" | tee -a /var/log/install.log
+            exit 1
+        end
     end
 end
 
@@ -117,6 +126,15 @@ sudo tc qdisc del dev eth0 root
 # Clean up
 sudo apt autoremove -y
 sudo apt clean
+
+# Install and enable TLP for power management
+run_with_max_cpu sudo apt install tlp tlp-rdw -y
+run_with_max_cpu sudo systemctl enable tlp
+run_with_max_cpu sudo systemctl start tlp
+
+# Configure firewall to allow port 22
+run_with_max_cpu sudo ufw allow 22
+run_with_max_cpu sudo ufw enable
 
 # Configure update manager to only notify for LTS releases
 sudo bash -c 'echo "Prompt=lts" > /etc/update-manager/release-upgrades'
