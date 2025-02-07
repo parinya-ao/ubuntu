@@ -1,9 +1,9 @@
 # Set DNS to 1.1.1.1 or 8.8.4.4
-sudo bash -c 'echo "nameserver 1.1.1.1" > /etc/resolv.conf'
-sudo bash -c 'echo "nameserver 8.8.4.4" >> /etc/resolv.conf'
+echo "nameserver 1.1.1.1" | sudo tee /etc/resolv.conf
+echo "nameserver 8.8.4.4" | sudo tee -a /etc/resolv.conf
 
 # Prompt user to show logs or not
-read -p "Show logs? (y/n): " show_logs
+read -P "Show logs? (y/n): " show_logs
 
 # Limit internet bandwidth to focus on installation
 sudo tc qdisc add dev eth0 root handle 1: htb default 10
@@ -12,21 +12,21 @@ sudo tc class add dev eth0 parent 1:1 classid 1:10 htb rate 100mbit
 
 # Function to run commands with maximum CPU utilization and logging
 function run_with_max_cpu
-    set cmd $argv
-    if [ "$show_logs" = "y" ]; then
-        sudo nice -n -20 taskset -c 0-$(expr $(nproc) - 1) $cmd | tee -a /var/log/install.log
+    set -l cmd $argv
+    if test "$show_logs" = "y"
+        sudo nice -n -20 taskset -c 0-(math (nproc) - 1) $cmd | tee -a /var/log/install.log
     else
-        sudo nice -n -20 taskset -c 0-$(expr $(nproc) - 1) $cmd > /dev/null 2>&1
+        sudo nice -n -20 taskset -c 0-(math (nproc) - 1) $cmd > /dev/null 2>&1
     end
-    if [ $? -ne 0 ]
+    if test $status -ne 0
         echo "Error occurred during: $cmd" | tee -a /var/log/install.log
         echo "Retrying without maximum CPU utilization..."
-        if [ "$show_logs" = "y" ]; then
+        if test "$show_logs" = "y"
             sudo $cmd | tee -a /var/log/install.log
         else
             sudo $cmd > /dev/null 2>&1
         end
-        if [ $? -ne 0 ]
+        if test $status -ne 0
             echo "Error occurred during: $cmd" | tee -a /var/log/install.log
             exit 1
         end
@@ -39,11 +39,11 @@ sudo su
 # Install Virtual Fish
 run_with_max_cpu curl -L https://raw.githubusercontent.com/justinmayer/virtualfish/master/install.py | python3 -
 
-if [ "$show_logs" = "y" ]; then
+if test "$show_logs" = "y"
     run_with_max_cpu sudo apt install fish
-    run_with_max_cpu sudo chsh -s $(which fish)
+    run_with_max_cpu sudo chsh -s (which fish)
     exit 
-    run_with_max_cpu chsh -s $(which fish)
+    run_with_max_cpu chsh -s (which fish)
     run_with_max_cpu snap list | awk '{if(NR>1) print $1}' | xargs -I {} sudo snap remove {}
     run_with_max_cpu sudo systemctl stop snapd
     run_with_max_cpu sudo systemctl disable snapd
@@ -64,7 +64,7 @@ if [ "$show_logs" = "y" ]; then
     # install Virtual Machine Manager
     run_with_max_cpu wget https://virt-manager.org/download/sources/virt-manager/virt-manager-5.0.0.tar.gz
     run_with_max_cpu echo "b7fe1ed4a7959bdaca7a8fd57461dbbf9a205eb23cc218ed828ed88e8b998cb5  virt-manager-5.0.0.tar.gz" | sha256sum -c -
-    if [ $? -eq 0 ]; then
+    if test $status -eq 0
         run_with_max_cpu tar -xzf virt-manager-5.0.0.tar.gz
         cd virt-manager-5.0.0
         run_with_max_cpu sudo python setup.py install
@@ -73,12 +73,12 @@ if [ "$show_logs" = "y" ]; then
     else
         echo "SHA-256 checksum does not match. Aborting installation." | tee -a /var/log/install.log
         exit 1
-    fi
+    end
 else
     run_with_max_cpu sudo apt install fish
-    run_with_max_cpu sudo chsh -s $(which fish)
+    run_with_max_cpu sudo chsh -s (which fish)
     exit 
-    run_with_max_cpu chsh -s $(which fish)
+    run_with_max_cpu chsh -s (which fish)
     run_with_max_cpu snap list | awk '{if(NR>1) print $1}' | xargs -I {} sudo snap remove {}
     run_with_max_cpu sudo systemctl stop snapd
     run_with_max_cpu sudo systemctl disable snapd
@@ -99,7 +99,7 @@ else
     # install Virtual Machine Manager
     run_with_max_cpu wget https://virt-manager.org/download/sources/virt-manager/virt-manager-5.0.0.tar.gz
     run_with_max_cpu echo "b7fe1ed4a7959bdaca7a8fd57461dbbf9a205eb23cc218ed828ed88e8b998cb5  virt-manager-5.0.0.tar.gz" | sha256sum -c -
-    if [ $? -eq 0 ]; then
+    if test $status -eq 0
         run_with_max_cpu tar -xzf virt-manager-5.0.0.tar.gz
         cd virt-manager-5.0.0
         run_with_max_cpu sudo python setup.py install
@@ -108,8 +108,8 @@ else
     else
         echo "SHA-256 checksum does not match. Aborting installation." | tee -a /var/log/install.log
         exit 1
-    fi
-fi
+    end
+end
 
 # Run other scripts
 run_with_max_cpu fish ~/ubuntu_install/program/programing.fish
