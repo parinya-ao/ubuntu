@@ -33,8 +33,6 @@ function run_with_max_cpu
     end
 end
 
-# Ensure all commands run with sudo su
-sudo su
 
 # Configure global mirrors
 run_with_max_cpu fish ~/ubuntu_install/program/mirror-config.fish

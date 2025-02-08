@@ -2,7 +2,7 @@
 read -p "Show logs? (y/n): " show_logs
 
 if [ "$show_logs" = "y" ]
-    sudo su
+    
     sudo apt update
     sudo apt install g++ clang -y
     sudo apt install cmake -y
@@ -22,7 +22,7 @@ if [ "$show_logs" = "y" ]
     # Source the fish configuration file
     source ~/.config/fish/config.fish
 else
-    sudo su > /dev/null 2>&1
+     > /dev/null 2>&1
     sudo apt update > /dev/null 2>&1
     sudo apt install g++ clang -y > /dev/null 2>&1
     sudo apt install cmake -y > /dev/null 2>&1

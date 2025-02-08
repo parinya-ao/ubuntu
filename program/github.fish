@@ -2,7 +2,7 @@
 read -p "Show logs? (y/n): " show_logs
 
 if [ "$show_logs" = "y" ]; then
-    sudo su
+    
     sudo apt update
     sudo apt install git -y
     sudo apt install software-properties-common -y
@@ -16,7 +16,7 @@ if [ "$show_logs" = "y" ]; then
     read -p "Press Enter to continue after completing GitHub login..."
     exit
 else
-    sudo su > /dev/null 2>&1
+     > /dev/null 2>&1
     sudo apt update > /dev/null 2>&1
     sudo apt install git -y > /dev/null 2>&1
     sudo apt install software-properties-common -y > /dev/null 2>&1
