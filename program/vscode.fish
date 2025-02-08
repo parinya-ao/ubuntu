@@ -1,4 +1,4 @@
-
+#!/usr/bin/env fish
 mkdir ~/Download/Temp
 cd ~/Download/Temp
 curl -o vscode.deb -L "https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64"

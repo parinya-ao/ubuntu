@@ -1,3 +1,4 @@
+#!/usr/bin/env fish
 # Prompt user to show logs or not
 read -p "Show logs? (y/n): " show_logs
 

@@ -1,3 +1,4 @@
+#!/usr/bin/env fish
 set -U fish_user_paths $fish_user_paths ~/.local/bin
 
 if status is-interactive
@@ -21,5 +22,5 @@ if status is-interactive
 	sudo apt full-upgrade -y
 	sudo apt autoremove
     end
-end	
+end
 

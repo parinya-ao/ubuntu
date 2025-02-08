@@ -1,4 +1,4 @@
-
+#!/usr/bin/env fish
 sudo apt update && sudo apt upgrade -y
 sudo apt remove docker docker-engine docker.io containerd runc
 sudo apt install apt-transport-https ca-certificates curl software-properties-common -y

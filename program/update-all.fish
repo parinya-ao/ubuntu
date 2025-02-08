@@ -1,3 +1,5 @@
+#!/usr/bin/env fish
+
 # Function to run commands with logging and error handling
 function run_with_logging
     set -l cmd $argv

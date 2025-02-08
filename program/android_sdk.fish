@@ -1,4 +1,4 @@
-
+#!/usr/bin/env fish
 mkdir -p ~/Android/Sdk
 cd ~/Android/Sdk
 curl -o commandlinetools-linux.zip -L "https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip"
