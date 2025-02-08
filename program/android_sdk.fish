@@ -14,10 +14,20 @@ set -Ux ANDROID_HOME $HOME/Android/Sdk
 set -Ux PATH $ANDROID_HOME/platform-tools $PATH
 # Install adb
 yes | sudo apt install adb -y
+# Install Java SDK (Java 17 LTS)
+sudo apt update
+yes | sudo apt install openjdk-17-jdk -y
+# Verify installed versions and paths
+echo "ANDROID_HOME is set to: $HOME/Android/Sdk"
+echo "ADB version:"; adb version
+echo "Java version:"; java -version
 # Clean up
 cd ~
 rm -rf ~/Android/Sdk/cmdline-tools/latest/bin
+# Expo login before script exit
+echo "Please log in to Expo Go:"
+expo login
 exit
-echo "Android SDK and adb installed and configured successfully."
+echo "Android SDK, adb, and Java installed and configured successfully."
 # Update Android SDK automatically
 yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --update
