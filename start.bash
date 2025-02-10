@@ -61,6 +61,10 @@ curl -o vscode.deb -L "https://code.visualstudio.com/sha/download?build=stable&o
 sudo apt install ./vscode.deb
 code --version
 sudo apt install g++ clang -y
+sudo apt install openjdk-17-jdk -y
+curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+nvm install lts
+sudo apt install watchman -y
 sudo apt install cmake -y
 sudo apt install curl -y
 sudo apt install -y build-essential curl
