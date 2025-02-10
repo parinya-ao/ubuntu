@@ -1,4 +1,4 @@
-# Install JDK 17
+# Update and Install JDK 17
 sudo apt-get update
 sudo apt-get install -y openjdk-17-jdk
 
@@ -16,36 +16,27 @@ mkdir -p cmdline-tools/latest
 mv cmdline-tools/* cmdline-tools/latest/
 rmdir cmdline-tools
 
-# Set up environment variables
-echo 'export ANDROID_HOME=$HOME/Android/Sdk' >> $HOME/.bashrc
-echo 'export PATH=$PATH:$ANDROID_HOME/emulator' >> $HOME/.bashrc
-echo 'export PATH=$PATH:$ANDROID_HOME/platform-tools' >> $HOME/.bashrc
-echo 'export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin' >> $HOME/.bashrc
-
-# Source the updated environment
-source $HOME/.bashrc
+# Set up environment variables in Fish shell
+echo 'set -x ANDROID_HOME $HOME/Android/Sdk' >> $HOME/.config/fish/config.fish
+echo 'set -x PATH $PATH $ANDROID_HOME/emulator' >> $HOME/.config/fish/config.fish
+echo 'set -x PATH $PATH $ANDROID_HOME/platform-tools' >> $HOME/.config/fish/config.fish
+echo 'set -x PATH $PATH $ANDROID_HOME/cmdline-tools/latest/bin' >> $HOME/.config/fish/config.fish
 
 # Install Android SDK components
 yes | sdkmanager --licenses
-sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0" "system-images;android-35;google_apis;x86_64"
-
-# Install Watchman dependencies
-sudo apt-get install -y libssl-dev libcrypto++-dev pkg-config libtool automake
-
-# Install Watchman from source
-cd $HOME
-git clone https://github.com/facebook/watchman.git
-cd watchman
-git checkout v2023.11.20.00
-./autogen.sh
-./configure
-make
-sudo make install
+sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0"
 
 # Install React Native CLI
 npm install -g react-native-cli
 
-# Create an Android Virtual Device
-echo "no" | avdmanager create avd -n RN_Device -k "system-images;android-35;google_apis;x86_64"
+# Set up your phone for development:
+# 1. Enable Developer Options on your Android phone.
+# 2. Enable USB Debugging in the Developer Options.
+# 3. Connect your Android phone via USB.
 
-echo "React Native development environment setup complete!"
+# Verify the connection of your phone (this step should be done after connecting the device)
+adb devices
+
+# Make sure your phone shows up in the list of devices. If it does, your device is ready for React Native development.
+
+echo "React Native development environment setup complete! You can now run your app on your physical device."
