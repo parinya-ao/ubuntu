@@ -11,39 +11,34 @@ deb http://archive.ubuntu.com/ubuntu/ $(lsb_release -cs)-backports main restrict
 deb http://security.ubuntu.com/ubuntu/ $(lsb_release -cs)-security main restricted universe multiverse" | sudo tee /etc/apt/sources.list
 
 sudo apt update && sudo apt upgrade -y && sudo apt full-upgrade -y > update.txt
-function run_with_max_cpu
-    set -l cmd $argv
-    sudo nice -n -20 taskset -c 0-(math (nproc) - 1) $cmd | tee -a /var/log/install.log
-end
-
 sudo apt install fish
-run_with_max_cpu sudo chsh -s (which fish)
-run_with_max_cpu sudo apt install fish
-run_with_max_cpu chsh -s (which fish)
-run_with_max_cpu snap list | awk '{if(NR>1) print $1}' | xargs -I {} sudo snap remove {}
-run_with_max_cpu sudo systemctl stop snapd
-run_with_max_cpu sudo systemctl disable snapd
-run_with_max_cpu sudo systemctl mask snapd
-run_with_max_cpu sudo rm -rf /var/cache/snapd/
-run_with_max_cpu sudo rm -rf ~/snap
-run_with_max_cpu sudo apt purge snapd -y
-run_with_max_cpu sudo rm -rf /etc/systemd/system/snapd* /var/lib/snapd
-run_with_max_cpu sudo apt autoremove --purge -y
+ sudo chsh -s (which fish)
+sudo apt install fish
+chsh -s (which fish)
+snap list | awk '{if(NR>1) print $1}' | xargs -I {} sudo snap remove {}
+sudo systemctl stop snapd
+sudo systemctl disable snapd
+sudo systemctl mask snapd
+sudo rm -rf /var/cache/snapd/
+sudo rm -rf ~/snap
+ sudo apt purge snapd -y
+ sudo rm -rf /etc/systemd/system/snapd* /var/lib/snapd
+ sudo apt autoremove --purge -y
 # using flatpak
-run_with_max_cpu sudo apt install flatpak -y
-run_with_max_cpu sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+sudo apt install flatpak -y
+sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 # install brave
-run_with_max_cpu sudo flatpak install flathub com.brave.Browser -y
+sudo flatpak install flathub com.brave.Browser -y
 # install discord
-run_with_max_cpu sudo flatpak install flathub com.discordapp.Discord -y
+sudo flatpak install flathub com.discordapp.Discord -y
 
 sudo apt autoremove -y
 sudo apt clean
-run_with_max_cpu sudo apt install tlp tlp-rdw -y
-run_with_max_cpu sudo systemctl enable tlp
-run_with_max_cpu sudo systemctl start tlp
-run_with_max_cpu sudo ufw allow 22
-run_with_max_cpu sudo ufw enable
+ sudo apt install tlp tlp-rdw -y
+ sudo systemctl enable tlp
+ sudo systemctl start tlp
+ sudo ufw allow 22
+ sudo ufw enable
 sudo bash -c 'echo "Prompt=lts" > /etc/update-manager/release-upgrades'
 
 sudo apt remove docker docker-engine docker.io containerd runc
@@ -86,6 +81,21 @@ flatpak install flathub org.libreoffice.LibreOffice -y
 flatpak install flathub dev.lapce.lapce -y
 flatpak install flathub com.vscodium.codium -y
 flatpak install flathub com.vscodium.codium-insiders -y
+sudo apt install preload -y
+sudo apt install zram-tools -y
+echo "zram" | sudo tee -a /etc/modules
+echo "options zram num_devices=1" | sudo tee -a /etc/modprobe.d/zram.conf
+echo 'KERNEL=="zram0", ATTR{disksize}="2G", RUN="/sbin/mkswap /dev/zram0", RUN+="/sbin/swapon /dev/zram0 -p 100"' | sudo tee /etc/udev/rules.d/99-zram.rules
+
+sudo apt install ufw -y
+sudo apt install ssh -y
+sudo ufw enable
+sudo apt install rcconf -y
+sudo rcconf
+sudo apt install tlp tlp-rdw -y
+sudo systemctl enable tlp
+sudo systemctl enable fstrim.timer
+sudo systemctl start fstrim.timer
 
 sudo apt install git -y
 sudo apt install software-properties-common -y
@@ -95,4 +105,7 @@ git config --global user.name (read -p "Enter your GitHub username: "; echo $REP
 git config --global user.email (read -p "Enter your GitHub email: "; echo $REPLY)
 gh auth login
 # Wait for the login to complete
+sudo apt autoremove -y
+sudo apt autoclean -y
+sudo apt clean -y
 read -p "Press Enter to continue after completing GitHub login..."
