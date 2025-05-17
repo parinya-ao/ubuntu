@@ -12,8 +12,12 @@ fzf_key_bindings
 
 curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher
 fisher install jorgebucaran/fish-autosuggestions
+fisher install ilancosman/tide\@v5
+fisher install jethrokuan/z
+fisher install jethrokuan/fzf
 fisher install PatrickF1/fzf.fish
-fisher install ilancosman/tide@v5
+fisher install oh-my-fish/plugin-autojump
+
 
 curl -sS https://starship.rs/install.sh | sh
 starship init fish | source
